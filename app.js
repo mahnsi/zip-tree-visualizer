@@ -12,7 +12,6 @@ import {
   let zoom = 1;
   let dragging = false;
   let dragStart = null;
-  let highlighted = new Set();   // keys flashing
   let pendingDel = null;          // key being deleted (pre-removal)
   let newKey = null;              // key just inserted (pop-in)
   
@@ -89,11 +88,10 @@ import {
       const p = positions[n.key];
       if (!p) continue;
       const c = rankColor(n.rank);
-      const isHi  = highlighted.has(n.key);
       const isDel = pendingDel === n.key;
       const isNew = newKey === n.key;
   
-      const cls = isDel ? 'node-del' : isNew ? 'node-new' : isHi ? 'node-hi' : '';
+      const cls = isDel ? 'node-del' : isNew ? 'node-new' : '';
   
       const group = svg('g', {
         transform: `translate(${p.x}, ${p.y})`,
@@ -108,7 +106,7 @@ import {
       // Body
       group.appendChild(svg('circle', {
         r: R, fill: `${c}18`, stroke: c,
-        'stroke-width': isHi ? '2.2' : '1.5',
+        'stroke-width': '1.5',
       }));
       // Key label
       const keyText = svgText(n.key, {
@@ -128,7 +126,6 @@ import {
       // Click to select
       group.addEventListener('click', () => {
         keyInput.value = n.key;
-        flash(n.key);
       });
   
       inner.appendChild(group);
@@ -150,12 +147,6 @@ import {
     const el = svg('text', attrs);
     el.textContent = content;
     return el;
-  }
-  
-  function flash(key, duration = 1400) {
-    highlighted.add(key);
-    render();
-    setTimeout(() => { highlighted.delete(key); render(); }, duration);
   }
   
   function addLog(msg, type = 'info') {
@@ -198,7 +189,6 @@ import {
     root = insertNode(root, node);
     newKey = key;
     setTimeout(() => { newKey = null; render(); }, 600);
-    flash(key, 1200);
     addLog(`insert("${key}",  rank = ${rank})`, 'insert');
     keyInput.value = '';
     rankInput.value = '';
@@ -210,7 +200,6 @@ import {
     if (!findNode(root, key)) return addLog(`"${key}" not found`, 'error');
   
     pendingDel = key;
-    flash(key, 380);
     addLog(`delete("${key}")`, 'delete');
     setTimeout(() => {
       root = deleteNode(root, key);
@@ -227,12 +216,11 @@ import {
     ];
     root = null;
     for (const n of items) root = insertNode(root, { ...n, left: null, right: null });
-    addLog('Loaded Figure 1 (Tarjan et al. 2022) — try inserting K with rank 3!', 'info');
+    addLog('Loaded Figure 1 (Tarjan et al. 2022)', 'info');
     render();
   }
   
-  // ─── Pan & Zoom ───────────────────────────────────────────────────────────────
-  
+  // pan and zoom
   const canvasEl = document.getElementById('tree-canvas');
   
   canvasEl.addEventListener('mousedown', e => {
@@ -272,7 +260,6 @@ import {
   btnExample.addEventListener('click', loadExample);
   btnClear.addEventListener('click', () => {
     root = null;
-    highlighted.clear();
     pendingDel = null;
     newKey = null;
     addLog('Tree cleared', 'info');

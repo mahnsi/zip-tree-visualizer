@@ -26,22 +26,22 @@
   --r7: #6a9e1a;
 
   --radius: 6px;
-  --font: 'IBM Plex Mono', 'Menlo', monospace;
+  --font:  Times, serif;
 }
 
 body {
-  font-family: var(--font);
   background: var(--bg);
   color: var(--text);
   height: 100vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  font-size: 13px;
+  font-size: 15px;
 }
 
 /* ── Header ── */
 header {
+  font-family: var(--font);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -53,15 +53,8 @@ header {
 .logo {
   font-size: 16px;
   font-weight: 600;
-  letter-spacing: -0.5px;
 }
-.logo span:first-child { color: var(--blue); }
-.logo span:last-child  { color: var(--text); }
-.logo-sub {
-  font-size: 10px;
-  color: var(--faint);
-  letter-spacing: 1px;
-}
+
 header .spacer { flex: 1; }
 header .credit {
   font-size: 10px;
@@ -77,7 +70,7 @@ header .credit {
 
 /* ── Sidebar ── */
 .sidebar {
-  width: 220px;
+  width: 250px;
   background: var(--surface);
   border-right: 1px solid var(--border);
   display: flex;
@@ -92,8 +85,6 @@ header .credit {
 }
 .panel-label {
   font-size: 9px;
-  letter-spacing: 2px;
-  color: var(--faint);
   text-transform: uppercase;
   margin-bottom: 10px;
 }
@@ -108,14 +99,9 @@ input[type="text"],
 input[type="number"] {
   width: 100%;
   padding: 6px 9px;
-  border: 1px solid var(--border2);
-  border-radius: var(--radius);
-  background: var(--bg);
   font-family: var(--font);
   font-size: 12px;
-  color: var(--text);
   outline: none;
-  transition: border-color .15s;
 }
 input:focus { border-color: var(--blue); }
 
@@ -127,20 +113,13 @@ input:focus { border-color: var(--blue); }
 .toggle {
   flex: 1;
   padding: 5px 0;
-  font-size: 9px;
-  letter-spacing: 1px;
+  font-size: 12px;
   border-radius: 4px;
-  border: 1px solid var(--border2);
-  background: transparent;
-  color: var(--muted);
   cursor: pointer;
-  transition: all .12s;
   font-family: var(--font);
 }
 .toggle.active {
-  background: #eef2fb;
-  border-color: #afc4ef;
-  color: var(--blue);
+  background: #729ae9;
 }
 
 .btn-row {
@@ -152,27 +131,22 @@ button {
   cursor: pointer;
   font-family: var(--font);
   border-radius: var(--radius);
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 1px;
   border: 1px solid transparent;
   padding: 6px 10px;
-  transition: all .12s;
 }
-button:active { transform: scale(.96); }
 
 .btn-insert {
   flex: 1;
-  background: #ebf7f1;
-  border-color: #9dd4b8;
-  color: var(--green);
+  background: rgb(19, 214, 19);
 }
+
 .btn-insert:hover { background: #d8f0e6; }
 
 .btn-delete {
   flex: 1;
-  background: #fdf0f0;
-  border-color: #e9b0b0;
-  color: var(--red);
+  background: rgb(255, 125, 125);
 }
 .btn-delete:hover { background: #fae0e0; }
 
@@ -180,19 +154,14 @@ button:active { transform: scale(.96); }
   width: 100%;
   background: transparent;
   border-color: var(--border2);
-  color: var(--muted);
   margin-top: 5px;
 }
-.btn-ghost:hover { background: var(--bg); color: var(--text); }
 
 .btn-danger {
   width: 100%;
-  background: transparent;
-  border-color: #e9b0b0;
-  color: #c08080;
+  border-color: var(--border2);
   margin-top: 5px;
 }
-.btn-danger:hover { background: #fdf0f0; }
 
 /* ── Stats ── */
 .stat-row {
@@ -204,42 +173,6 @@ button:active { transform: scale(.96); }
 .stat-row .key { color: var(--muted); }
 .stat-row .val { color: var(--text); font-weight: 500; }
 
-/* ── Rank legend ── */
-.rank-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4px 8px;
-}
-.rank-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 10px;
-  color: var(--muted);
-}
-.rank-dot {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-/* ── Distribution bars ── */
-.dist-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 5px;
-}
-.dist-bar-bg {
-  flex: 1;
-  height: 3px;
-  background: var(--border);
-  border-radius: 2px;
-  overflow: hidden;
-}
-.dist-bar-fill { height: 100%; border-radius: 2px; }
-.dist-label { font-size: 9px; color: var(--faint); width: 28px; text-align: right; }
 
 /* ── Canvas area ── */
 .canvas-wrap {
@@ -280,20 +213,6 @@ button:active { transform: scale(.96); }
 }
 .empty-hint svg { opacity: 0.18; }
 
-.zoom-info {
-  position: absolute;
-  bottom: 12px;
-  right: 14px;
-  font-size: 9px;
-  color: var(--faint);
-  letter-spacing: 1px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 3px 8px;
-  pointer-events: none;
-}
-
 /* ── Log ── */
 .log-panel {
   height: 100px;
@@ -305,9 +224,7 @@ button:active { transform: scale(.96); }
   font-size: 10.5px;
 }
 .log-title {
-  font-size: 8px;
-  letter-spacing: 2px;
-  color: var(--faint);
+  font-size: 12px;
   margin-bottom: 5px;
 }
 .log-entry {

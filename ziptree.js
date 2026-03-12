@@ -6,11 +6,19 @@ export function geometricRank() {
     return k;
   }
   
+  // Compare keys: numeric if both parse as numbers, lexicographic otherwise.
+  // Returns negative, zero, or positive.
+  function cmp(a, b) {
+    const na = Number(a), nb = Number(b);
+    if (!isNaN(na) && !isNaN(nb)) return na - nb;
+    return a < b ? -1 : a > b ? 1 : 0;
+  }
+  
   // Unzip: split subtree rooted at `node` into two paths by xkey.
   // Returns [P, Q] where P has all keys < xkey, Q has all keys > xkey.
   function unzip(node, xkey) {
     if (!node) return [null, null];
-    if (node.key < xkey) {
+    if (cmp(node.key, xkey) < 0) {
       const [p, q] = unzip(node.right, xkey);
       return [{ ...node, right: p }, q];
     } else {
@@ -27,7 +35,7 @@ export function geometricRank() {
   
     function ins(cur) {
       if (!cur) return x;
-      if (x.key < cur.key) {
+      if (cmp(x.key, cur.key) < 0) {
         if (x.rank >= cur.rank) {
           const [p, q] = unzip(cur, x.key);
           x.left = p; x.right = q;
@@ -58,8 +66,9 @@ export function geometricRank() {
   export function deleteNode(root, key) {
     function del(cur) {
       if (!cur) return null;
-      if (key === cur.key) return zip(cur.left, cur.right);
-      if (key < cur.key) return { ...cur, left: del(cur.left) };
+      const c = cmp(key, cur.key);
+      if (c === 0) return zip(cur.left, cur.right);
+      if (c < 0) return { ...cur, left: del(cur.left) };
       return { ...cur, right: del(cur.right) };
     }
     return del(root);
@@ -67,8 +76,9 @@ export function geometricRank() {
   
   export function findNode(root, key) {
     if (!root) return null;
-    if (root.key === key) return root;
-    return key < root.key ? findNode(root.left, key) : findNode(root.right, key);
+    const c = cmp(key, root.key);
+    if (c === 0) return root;
+    return c < 0 ? findNode(root.left, key) : findNode(root.right, key);
   }
   
   export function treeHeight(root) {

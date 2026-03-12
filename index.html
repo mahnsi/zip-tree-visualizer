@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zip Tree Visualizer</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header>
+    <div class="logo"><span>zip</span><span>tree</span></div>
+    <div class="logo-sub">VISUALIZER</div>
+    <div class="spacer"></div>
+    <div class="credit">Tarjan · Levy · Timmel 2022</div>
+  </header>
+
+  <div class="app">
+
+    <!-- ── Sidebar ── -->
+    <aside class="sidebar">
+
+      <div class="panel">
+        <div class="panel-label">Operation</div>
+
+        <div class="field-label">KEY</div>
+        <input id="key-input" type="text" placeholder="e.g.  K" maxlength="8" autocomplete="off" spellcheck="false" />
+
+        <div class="field-label" style="margin-top:10px;">RANK MODE</div>
+        <div class="toggle-row">
+          <button id="btn-mode-random" class="toggle active">RANDOM</button>
+          <button id="btn-mode-manual" class="toggle">MANUAL</button>
+        </div>
+
+        <div id="rank-manual-row" style="display:none; margin-top:8px;">
+          <div class="field-label">RANK</div>
+          <input id="rank-input" type="number" min="0" max="20" placeholder="0" />
+        </div>
+
+        <div class="btn-row">
+          <button id="btn-insert" class="btn-insert">INSERT</button>
+          <button id="btn-delete" class="btn-delete">DELETE</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-label">Tree Stats</div>
+        <div class="stat-row"><span class="key">nodes</span>   <span id="stat-nodes"   class="val">0</span></div>
+        <div class="stat-row"><span class="key">height</span>  <span id="stat-height"  class="val">0</span></div>
+        <div class="stat-row"><span class="key">root</span>    <span id="stat-root"    class="val">—</span></div>
+        <div class="stat-row"><span class="key">max rank</span><span id="stat-maxrank" class="val">—</span></div>
+      </div>
+
+      
+      <div class="panel">
+        <button id="btn-example"   class="btn-ghost">Load paper example</button>
+        <button id="btn-clear"     class="btn-danger">Clear </button>
+      </div>
+
+      <div class="panel">
+        <div class="panel-label">Rank → Color</div>
+        <div class="rank-grid" id="rank-legend"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-label">P(rank = k) = 1 / 2^(k+1)</div>
+        <div id="dist-bars"></div>
+      </div>
+
+      
+
+    </aside>
+
+    <!-- ── Canvas + Log ── -->
+    <div class="canvas-wrap">
+      <div id="tree-canvas">
+        <svg id="tree-svg"></svg>
+        <div id="empty-hint" class="empty-hint">
+          <svg width="64" height="52" viewBox="0 0 64 52">
+            <circle cx="32" cy="11" r="9"  fill="#aaa"/>
+            <circle cx="16" cy="38" r="7"  fill="#ccc"/>
+            <circle cx="48" cy="38" r="7"  fill="#ccc"/>
+            <line x1="32" y1="20" x2="16" y2="31" stroke="#ccc" stroke-width="1.5"/>
+            <line x1="32" y1="20" x2="48" y2="31" stroke="#ccc" stroke-width="1.5"/>
+          </svg>
+          INSERT A NODE TO BEGIN
+        </div>
+        <div id="zoom-info" class="zoom-info">100% · scroll=zoom · drag=pan</div>
+      </div>
+
+      <div class="log-panel" id="log-panel">
+        <div class="log-title">OPERATION LOG</div>
+      </div>
+    </div>
+
+  </div>
+
+  <script type="module" src="app.js"></script>
+  <script>
+    // Build rank legend + distribution bars from JS-side colors
+    // (inline so it runs before module, using same palette)
+    const COLORS = ['#2d9e5f','#3b72d4','#9055d4','#c94a9a','#d94040','#c07a10','#1a9e9e','#6a9e1a','#4a7ab4','#a04040'];
+    const legend = document.getElementById('rank-legend');
+    for (let i = 0; i < 8; i++) {
+      legend.innerHTML += `
+        <div class="rank-item">
+          <div class="rank-dot" style="background:${COLORS[i]}"></div>
+          <span>rank ${i}</span>
+        </div>`;
+    }
+    const dist = document.getElementById('dist-bars');
+    for (let k = 0; k < 5; k++) {
+      const pct = (100 / Math.pow(2, k)).toFixed(1);
+      dist.innerHTML += `
+        <div class="dist-row">
+          <div class="rank-dot" style="background:${COLORS[k]};width:7px;height:7px;border-radius:50%;flex-shrink:0"></div>
+          <div class="dist-bar-bg">
+            <div class="dist-bar-fill" style="width:${pct}%;background:${COLORS[k]}"></div>
+          </div>
+          <span class="dist-label">1/${Math.pow(2,k+1)}</span>
+        </div>`;
+    }
+  </script>
+</body>
+</html>

@@ -9,9 +9,12 @@
 <body>
 
   <header>
-    <div class="logo"><span>Zip Tree Visualizer</span></div>
+    <div class="logo">
+      <span id="tree-mode-label">Zip Tree</span>
+      <span class="logo-sub">Visualizer</span>
+    </div>
     <div class="spacer"></div>
-    <div class="credit">Tarjan · Levy · Timmel 2022</div>
+    <div class="credit">Tarjan · Levy · Timmel 2021 &nbsp;·&nbsp; Gila · Goodrich · Tarjan 2024</div>
   </header>
 
   <div class="app">
@@ -19,6 +22,19 @@
     <!-- ── Sidebar ── -->
     <aside class="sidebar">
 
+      <!-- Tree mode -->
+      <div class="panel">
+        <div class="field-label">TREE MODE</div>
+        <div class="toggle-row">
+          <button id="btn-tree-zip"    class="toggle active">ZIP</button>
+          <button id="btn-tree-zipzip" class="toggle">ZIP-ZIP</button>
+        </div>
+        <div id="tree-mode-hint" class="mode-hint">
+          Geometric rank · Tarjan et al.
+        </div>
+      </div>
+
+      <!-- Key + rank input -->
       <div class="panel">
         <div class="field-label">Key</div>
         <input id="key-input" type="text" maxlength="8" autocomplete="off" spellcheck="false" />
@@ -30,8 +46,9 @@
         </div>
 
         <div id="rank-manual-row" style="display:none; margin-top:8px;">
-          <div class="field-label">RANK</div>
-          <input id="rank-input" type="number" min="0" max="20" placeholder="0" />
+          <div class="field-label" id="rank-input-label">RANK</div>
+          <input id="rank-input" type="text" placeholder="0" />
+          <div class="field-hint" id="rank-hint">Integer 0–20</div>
         </div>
 
         <div class="btn-row">
@@ -40,18 +57,31 @@
         </div>
       </div>
 
+      <!-- Stats -->
       <div class="panel">
         <div class="panel-label">Tree Stats</div>
-        <div class="stat-row"><span class="key">nodes</span>   <span id="stat-nodes"   class="val">0</span></div>
-        <div class="stat-row"><span class="key">height</span>  <span id="stat-height"  class="val">0</span></div>
-        <div class="stat-row"><span class="key">root</span>    <span id="stat-root"    class="val">—</span></div>
-        <div class="stat-row"><span class="key">max rank</span><span id="stat-maxrank" class="val">—</span></div>
+        <div class="stat-row"><span class="key">nodes</span>    <span id="stat-nodes"   class="val">0</span></div>
+        <div class="stat-row"><span class="key">height</span>   <span id="stat-height"  class="val">0</span></div>
+        <div class="stat-row"><span class="key">root</span>     <span id="stat-root"    class="val">—</span></div>
+        <div class="stat-row"><span class="key">max rank</span> <span id="stat-maxrank" class="val">—</span></div>
       </div>
 
-      
+      <!-- Actions -->
       <div class="panel">
-        <button id="btn-example"   class="btn-ghost">Load paper example</button>
-        <button id="btn-clear"     class="btn-danger">Clear </button>
+        <button id="btn-example" class="btn-ghost">Load paper example</button>
+        <button id="btn-clear"   class="btn-danger">Clear</button>
+      </div>
+
+      <!-- Legend (zip-zip only) -->
+      <div class="panel" id="zipzip-legend" style="display:none;">
+        <div class="panel-label">Zip-Zip Legend</div>
+        <div class="legend-item">
+          <span class="legend-box legend-group"></span>
+          <span class="legend-text">Shared r1-rank group (uniform zip tree)</span>
+        </div>
+        <div class="legend-item" style="margin-top:6px;">
+          <span class="legend-text muted">Each group is itself a treap on r2 ranks — this is the "zip tree of zip trees" structure.</span>
+        </div>
       </div>
 
     </aside>
@@ -60,9 +90,6 @@
     <div class="canvas-wrap">
       <div id="tree-canvas">
         <svg id="tree-svg"></svg>
-        <div>
-          INSERT A NODE TO BEGIN
-        </div>
       </div>
 
       <div class="log-panel" id="log-panel">

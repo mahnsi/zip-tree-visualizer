@@ -26,7 +26,7 @@
   --r7: #6a9e1a;
 
   --radius: 6px;
-  --font:  Times, serif;
+  --font: Times, serif;
 }
 
 body {
@@ -53,12 +53,19 @@ header {
 .logo {
   font-size: 16px;
   font-weight: 600;
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
 }
-
+.logo-sub {
+  font-weight: 400;
+  color: var(--muted);
+}
 header .spacer { flex: 1; }
 header .credit {
   font-size: 10px;
   color: var(--faint);
+  letter-spacing: 0.5px;
 }
 
 /* ── Layout ── */
@@ -86,14 +93,31 @@ header .credit {
 .panel-label {
   font-size: 9px;
   text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
   margin-bottom: 10px;
+}
+
+/* ── Mode hint ── */
+.mode-hint {
+  font-size: 10px;
+  color: var(--faint);
+  margin-top: 7px;
+  font-style: italic;
 }
 
 /* ── Form controls ── */
 .field-label {
   font-size: 10px;
   color: var(--muted);
+  letter-spacing: 0.5px;
   margin-bottom: 4px;
+}
+.field-hint {
+  font-size: 9.5px;
+  color: var(--faint);
+  margin-top: 3px;
+  font-style: italic;
 }
 input[type="text"],
 input[type="number"] {
@@ -102,6 +126,10 @@ input[type="number"] {
   font-family: var(--font);
   font-size: 12px;
   outline: none;
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text);
 }
 input:focus { border-color: var(--blue); }
 
@@ -113,13 +141,27 @@ input:focus { border-color: var(--blue); }
 .toggle {
   flex: 1;
   padding: 5px 0;
-  font-size: 12px;
+  font-size: 11px;
+  letter-spacing: 1px;
   border-radius: 4px;
   cursor: pointer;
   font-family: var(--font);
+  border: 1px solid var(--border2);
+  background: transparent;
+  color: var(--muted);
+  transition: background 0.15s, color 0.15s;
 }
+.toggle:hover { background: var(--bg); color: var(--text); }
 .toggle.active {
   background: #729ae9;
+  border-color: #729ae9;
+  color: #fff;
+}
+
+/* Zip-zip mode: give the zip-zip toggle a distinct active color */
+#btn-tree-zipzip.active {
+  background: #9055d4;
+  border-color: #9055d4;
 }
 
 .btn-row {
@@ -141,7 +183,6 @@ button {
   flex: 1;
   background: rgb(19, 214, 19);
 }
-
 .btn-insert:hover { background: #d8f0e6; }
 
 .btn-delete {
@@ -161,6 +202,7 @@ button {
   width: 100%;
   border-color: var(--border2);
   margin-top: 5px;
+  background: transparent;
 }
 
 /* ── Stats ── */
@@ -173,6 +215,28 @@ button {
 .stat-row .key { color: var(--muted); }
 .stat-row .val { color: var(--text); font-weight: 500; }
 
+/* ── Zip-Zip Legend ── */
+.legend-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+.legend-box {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  margin-top: 1px;
+}
+.legend-group {
+  background: #9055d422;
+  border: 1px dashed #9055d4;
+}
+.legend-text { flex: 1; }
+.legend-text.muted { color: var(--faint); font-style: italic; }
 
 /* ── Canvas area ── */
 .canvas-wrap {
@@ -226,6 +290,7 @@ button {
 .log-title {
   font-size: 12px;
   margin-bottom: 5px;
+  color: var(--muted);
 }
 .log-entry {
   display: flex;
@@ -254,6 +319,4 @@ button {
   50%       { opacity: 0.35; }
 }
 
-.node-new  { animation: popIn  .42s cubic-bezier(.4,0,.2,1) both; }
 .node-del  { animation: fadeOut .36s ease-in both; }
-.node-hi   { animation: glow .55s ease-in-out 2; }
